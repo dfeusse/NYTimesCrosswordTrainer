@@ -31,7 +31,28 @@
   			{{ message }}
   		</div>
 
-  		<button type="button" @click="pressButton()">New Crossword Question</button>
+  		<button type="button" @click="pressButton()">Answer</button>
+  		<button type="button" @click="pressButton()">Explanation</button>
+  		<button type="button" @click="getQuestion()">New Crossword Question</button>
+
+  		<div>
+  			<!-- question -->
+  			{{ crosswordQuestion }}
+  		</div>
+
+  		<h1 v-if="crosswordQuestion == null">Q1</h1>
+		<h1 v-else>Oh no 😢</h1>
+
+  		<div>
+  			<!-- number of letters -->
+  		</div>
+  		<div>
+  			<!-- answer -->
+  		</div>
+  		<div>
+  			<!-- explanation -->
+  		</div>
+  		<!-- for the above, just render them all, but only show the first. and then have functions to toggle a boolean for each, and then have if-true for each div. and the next button resets all -->
 
 	</div> <!-- end of #app div -->
 
@@ -54,10 +75,18 @@
 
 	  				console.log(this.crosswordList);
 
+
+
 	  			},
 	  			nextClue: function() {
 	  				console.log('next clue');
 	  				//may need to set, let showAnswer = false and then toggle to true if button pressed
+	  			},
+	  			getQuestion: function() {
+	  				let numQuestions = this.crosswordList.length;
+	  				this.crosswordQuestion = this.crosswordList[_.random(0, numQuestions)];
+	  				console.log(this.crosswordQuestion);
+	  				//return this.crosswordList[_.random(0, numQuestions)];
 	  			}
 	  		},
 	  		data: {
@@ -67,12 +96,13 @@
     				{"clue": "What is the capital of Michigan?"}
     			],
     			crosswordList: null,
+    			crosswordQuestion: null
 	  		},
 	  		mounted() {
 	  			fetch("historicCrosswordData.json")
-	  					.then(response => response.json())
-	  					.then(data => (this.crosswordList = data))
-	  					.then(console.log(this.crosswordList))
+  					.then(response => response.json())
+  					.then(data => (this.crosswordList = data))
+  					//.then(console.log(this.crosswordList));
 	  		}
 		})
 	</script>
