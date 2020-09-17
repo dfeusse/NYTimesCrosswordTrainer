@@ -1,19 +1,80 @@
 <!doctype html>
-
 <html lang="en">
 <head>
-<meta charset="utf-8">
+	<meta charset="utf-8">
+	<title>The NYTimes Crossword Trainer</title>
+	<meta content="width=device-width,initial-scale=1,minimal-ui" name="viewport">
+	<meta name="description" content="SundayHereWeCome">
+	<meta name="author" content="DanFeusse">
 
-<title>The NYTimes Crossword Trainer</title>
-<meta name="description" content="SundayHereWeCome">
-<meta name="author" content="DanFeusse">
-
-<link rel="stylesheet" href="">
-
+	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700,400italic|Material+Icons">
+    <link rel="stylesheet" href="https://unpkg.com/vue-material/dist/vue-material.min.css">
+    <link rel="stylesheet" href="https://unpkg.com/vue-material/dist/theme/default.css">
+	<link rel="stylesheet" href="">
+	
+	<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/underscore@1.11.0/underscore-min.js"></script>
+    <script src="https://unpkg.com/vue-material"></script>
 </head>
 
 <body>
-	<script src="js/scripts.js"></script>
-	<h1>hello world!</h1>
+
+	<div id="app">
+		<div class="md-layout md-gutter">
+    		<div class="md-layout-item">1</div>
+    		<div class="md-layout-item">2</div>
+    		<div class="md-layout-item">3</div>
+  		</div>
+
+
+		<div>
+  			{{ message }}
+  		</div>
+
+  		<button type="button" @click="pressButton()">New Crossword Question</button>
+
+	</div> <!-- end of #app div -->
+
+
+
+	<script type="text/javascript">
+		var app = new Vue({
+	  		el: '#app',
+	  		methods: {
+	  			pressButton: function() {
+	  				console.log("pressed button");
+	  				console.log(this.clues);
+
+	  				let totalNumberOfClues = this.clues.length;
+	  				//let totalNumberOfCluesUnderscore = _.size(this.clues);
+	  				console.log(totalNumberOfClues);
+	  				console.log(this.clues[1].clue);
+
+	  				console.log(_.random(0, 100)); //inclusive
+
+	  				console.log(this.crosswordList);
+
+	  			},
+	  			nextClue: function() {
+	  				console.log('next clue');
+	  				//may need to set, let showAnswer = false and then toggle to true if button pressed
+	  			}
+	  		},
+	  		data: {
+    			message: 'Hello World via Vue!',
+    			clues: [
+    				{"clue": "What is the capital of Ohio?"},
+    				{"clue": "What is the capital of Michigan?"}
+    			],
+    			crosswordList: null,
+	  		},
+	  		mounted() {
+	  			fetch("historicCrosswordData.json")
+	  					.then(response => response.json())
+	  					.then(data => (this.crosswordList = data))
+	  					.then(console.log(this.crosswordList))
+	  		}
+		})
+	</script>
 </body>
 </html>
