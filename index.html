@@ -31,8 +31,8 @@
   			{{ message }}
   		</div>
 
-  		<button type="button" @click="pressButton()">Answer</button>
-  		<button type="button" @click="pressButton()">Explanation</button>
+  		<button type="button" @click="buttonShowAnswer()">Answer</button>
+  		<button type="button" @click="buttonShowExplanation()">Explanation</button>
   		<button type="button" @click="getQuestion()">New Crossword Question</button>
 
   		<div>
@@ -40,8 +40,21 @@
   			{{ crosswordQuestion }}
   		</div>
 
-  		<h1 v-if="crosswordQuestion == null">Q1</h1>
-		<h1 v-else>Oh no 😢</h1>
+  		<h3 v-if="crosswordQuestion == null">Question here</h3>
+		<div v-else>
+			<h2> {{ crosswordQuestion.Question }} </h2>
+			<p> {{ crosswordQuestion.Answer.length }} letters - {{ crosswordQuestion.Day }} - Frequency: {{ crosswordQuestion.Frequency }} </p>
+
+			<br>
+
+			<p v-if="this.showAnswer == false"></p>
+			<h3 v-else> {{ crosswordQuestion.Answer }} </h3>
+
+			<br>
+
+			<p v-if="this.showExplanation == false"></p>
+			<span v-else> {{ crosswordQuestion.Explanation }} </span>
+		</div>
 
   		<div>
   			<!-- number of letters -->
@@ -87,6 +100,14 @@
 	  				this.crosswordQuestion = this.crosswordList[_.random(0, numQuestions)];
 	  				console.log(this.crosswordQuestion);
 	  				//return this.crosswordList[_.random(0, numQuestions)];
+	  				this.showAnswer = false;
+	  				this.showExplanation = false;
+	  			},
+	  			buttonShowAnswer: function() {
+	  				this.showAnswer = true;
+	  			},
+	  			buttonShowExplanation: function() {
+	  				this.showExplanation = true;
 	  			}
 	  		},
 	  		data: {
@@ -96,7 +117,9 @@
     				{"clue": "What is the capital of Michigan?"}
     			],
     			crosswordList: null,
-    			crosswordQuestion: null
+    			crosswordQuestion: null,
+    			showAnswer: false,
+    			showExplanation: false
 	  		},
 	  		mounted() {
 	  			fetch("historicCrosswordData.json")
