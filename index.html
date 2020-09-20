@@ -14,31 +14,37 @@
 	
 	<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
 	<script src="https://cdn.jsdelivr.net/npm/underscore@1.11.0/underscore-min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.20.1/moment.min.js"></script>
+
     <script src="https://unpkg.com/vue-material"></script>
 </head>
 
 <body>
 
 	<div id="app">
+		<!--
 		<div class="md-layout md-gutter">
     		<div class="md-layout-item">1</div>
     		<div class="md-layout-item">2</div>
     		<div class="md-layout-item">3</div>
   		</div>
-
-
-		<div>
-  			{{ message }}
+  		-->
+  		<div>
+  			<p>Questions answered:</p>
+  			<p id="timer"></p>
   		</div>
-
-  		<button type="button" @click="buttonShowAnswer()">Answer</button>
-  		<button type="button" @click="buttonShowExplanation()">Explanation</button>
-  		<button type="button" @click="getQuestion()">New Crossword Question</button>
 
   		<div>
   			<!-- question -->
   			{{ crosswordQuestion }}
   		</div>
+
+  		<p> Starting Place: </p>
+  		<input v-model="firstQuestionPlace" placeholder="edit me">
+  		
+  		<p>Ending Place: </p>
+  		<input v-model="lastQuestionPlace" placeholder="edit me">
+  		<p>End of clues is: {{ lastQuestionPlace }}</p>
 
   		<h3 v-if="crosswordQuestion == null">Question here</h3>
 		<div v-else>
@@ -56,48 +62,44 @@
 			<span v-else> {{ crosswordQuestion.Explanation }} </span>
 		</div>
 
-  		<div>
-  			<!-- number of letters -->
-  		</div>
-  		<div>
-  			<!-- answer -->
-  		</div>
-  		<div>
-  			<!-- explanation -->
-  		</div>
   		<!-- for the above, just render them all, but only show the first. and then have functions to toggle a boolean for each, and then have if-true for each div. and the next button resets all -->
+
+  		<button type="button" @click="buttonShowAnswer()">Answer</button>
+  		<button type="button" @click="buttonShowExplanation()">Explanation</button>
+  		<button type="button" @click="getQuestion()">New Crossword Question</button>
 
 	</div> <!-- end of #app div -->
 
 
 
 	<script type="text/javascript">
+
+		function startTimer()
+			{
+			    var startTimestamp = moment().startOf("day");
+			    setInterval(function() {
+			        startTimestamp.add(1, 'second');
+			        document.getElementById('timer').innerHTML = 
+			            "Time studied: " + startTimestamp.format('HH:mm:ss');
+			    }, 1000);
+			}
+
+			startTimer();
+
 		var app = new Vue({
 	  		el: '#app',
 	  		methods: {
-	  			pressButton: function() {
-	  				console.log("pressed button");
-	  				console.log(this.clues);
-
-	  				let totalNumberOfClues = this.clues.length;
-	  				//let totalNumberOfCluesUnderscore = _.size(this.clues);
-	  				console.log(totalNumberOfClues);
-	  				console.log(this.clues[1].clue);
-
-	  				console.log(_.random(0, 100)); //inclusive
-
-	  				console.log(this.crosswordList);
-
-
-
-	  			},
-	  			nextClue: function() {
-	  				console.log('next clue');
-	  				//may need to set, let showAnswer = false and then toggle to true if button pressed
-	  			},
 	  			getQuestion: function() {
 	  				let numQuestions = this.crosswordList.length;
-	  				this.crosswordQuestion = this.crosswordList[_.random(0, numQuestions)];
+	  				console.log(numQuestions)
+	  				this.crosswordQuestion = this.crosswordList[_.random(this.firstQuestionPlace, numQuestions)];
+
+	  				console.log('******************');
+	  				console.log(this.firstQuestionPlace)
+	  				console.log('******************');
+
+	  				// !!!!!! when picking which questions to get, just need to change: numQuestions
+
 	  				console.log(this.crosswordQuestion);
 	  				//return this.crosswordList[_.random(0, numQuestions)];
 	  				this.showAnswer = false;
@@ -111,7 +113,8 @@
 	  			}
 	  		},
 	  		data: {
-    			message: 'Hello World via Vue!',
+	  			firstQuestionPlace: 0,
+	  			lastQuestionPlace: 38086,
     			clues: [
     				{"clue": "What is the capital of Ohio?"},
     				{"clue": "What is the capital of Michigan?"}
@@ -119,15 +122,25 @@
     			crosswordList: null,
     			crosswordQuestion: null,
     			showAnswer: false,
-    			showExplanation: false
+    			showExplanation: false,
+    			numOfQuestionsAnswered: 0,
+    			startTimestamp: moment().startOf("day")
 	  		},
 	  		mounted() {
 	  			fetch("historicCrosswordData.json")
   					.then(response => response.json())
   					.then(data => (this.crosswordList = data))
+  					.then(data => (
+  						this.crosswordQuestion = data[_.random(0,300)]
+  					))
+  					.then(data => (
+  						//this.lastQuestionPlace = data.length
+  						console.log(data)
+  					))
   					//.then(console.log(this.crosswordList));
 	  		}
 		})
+
 	</script>
 </body>
 </html>
