@@ -7,84 +7,111 @@
 	<meta name="description" content="SundayHereWeCome">
 	<meta name="author" content="DanFeusse">
 
-	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700,400italic|Material+Icons">
-    <link rel="stylesheet" href="https://unpkg.com/vue-material/dist/vue-material.min.css">
-    <link rel="stylesheet" href="https://unpkg.com/vue-material/dist/theme/default.css">
-	<link rel="stylesheet" href="">
+	<!-- Bootstrap CSS only -->
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+
+	<!-- Bootstrap JS, Popper.js, and jQuery -->
+	<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+	<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
+	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script>
 	
 	<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
 	<script src="https://cdn.jsdelivr.net/npm/underscore@1.11.0/underscore-min.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.20.1/moment.min.js"></script>
 
     <script src="https://unpkg.com/vue-material"></script>
+
+    <link rel="stylesheet" href="">
+    <style type="text/css">
+    	.form-control {
+    		width: 25%;
+    	}
+
+    	-webkit-font-smoothing: antialiased;
+		-moz-osx-font-smoothing: grayscale;
+    </style>
 </head>
 
 <body>
 
 	<div id="app">
-		<!--
-		<div class="md-layout md-gutter">
-    		<div class="md-layout-item">1</div>
-    		<div class="md-layout-item">2</div>
-    		<div class="md-layout-item">3</div>
-  		</div>
-  		-->
-  		<div>
-  			<p>Questions answered:</p>
-  			<p id="timer"></p>
-  		</div>
 
-  		<div>
-  			<!-- question -->
-  			{{ crosswordQuestion }}
-  		</div>
-
-  		<p> Starting Place: </p>
-  		<input v-model="firstQuestionPlace" placeholder="edit me">
-  		
-  		<p>Ending Place: </p>
-  		<input v-model="lastQuestionPlace" placeholder="edit me">
-  		<p>End of clues is: {{ lastQuestionPlace }}</p>
-
-  		<h3 v-if="crosswordQuestion == null">Question here</h3>
-		<div v-else>
-			<h2> {{ crosswordQuestion.Question }} </h2>
-			<p> {{ crosswordQuestion.Answer.length }} letters - {{ crosswordQuestion.Day }} - Frequency: {{ crosswordQuestion.Frequency }} </p>
-
-			<br>
-
-			<p v-if="this.showAnswer == false"></p>
-			<h3 v-else> {{ crosswordQuestion.Answer }} </h3>
-
-			<br>
-
-			<p v-if="this.showExplanation == false"></p>
-			<span v-else> {{ crosswordQuestion.Explanation }} </span>
+		<div class="d-flex flex-column flex-md-row align-items-center p-3 px-md-4 mb-3 bg-white border-bottom shadow-sm">
+			<div class="container">
+				<div class="row">
+  					<h5 class="my-0 mr-md-auto font-weight-normal">NYTimes Crossword Trainer</h5>
+  				</div>
+  			</div>
 		</div>
 
-  		<!-- for the above, just render them all, but only show the first. and then have functions to toggle a boolean for each, and then have if-true for each div. and the next button resets all -->
+		<div class="container">
+			<div class="row">
+				<div class="col-12 col-md">
+			  		
+			  		<!-- <p>End of clues is: {{ lastQuestionPlace }}</p> -->
 
-  		<button type="button" @click="buttonShowAnswer()">Answer</button>
-  		<button type="button" @click="buttonShowExplanation()">Explanation</button>
-  		<button type="button" @click="getQuestion()">New Crossword Question</button>
+			  		<h3 v-if="crosswordQuestion == null">Question here</h3>
+					<div v-else>
+						<h2> {{ crosswordQuestion.Question }} </h2>
+						<p> {{ crosswordQuestion.Answer.length }} letters - {{ crosswordQuestion.Day }} - Frequency: {{ crosswordQuestion.Frequency }} </p>
+
+						<br>
+
+						<p v-if="this.showAnswer == false"></p>
+						<h3 v-else> {{ crosswordQuestion.Answer }} </h3>
+
+						<br>
+
+						<p v-if="this.showExplanation == false"></p>
+						<span v-else> {{ crosswordQuestion.Explanation }} </span>
+					</div>
+
+			  		<!-- for the above, just render them all, but only show the first. and then have functions to toggle a boolean for each, and then have if-true for each div. and the next button resets all -->
+
+			  		<button type="button" class="btn btn-outline-dark" @click="buttonShowAnswer()">Answer</button>
+			  		<button type="button" class="btn btn-outline-dark" @click="buttonShowExplanation()">Explanation</button>
+			  		<button type="button" class="btn btn-outline-dark" @click="getQuestion()">New Crossword Question</button>
+
+			  		<hr>
+
+			  		<div>
+						<div>
+				  			<p>Questions answered: {{ numOfQuestionsAnswered }}</p>
+				  			<p id="timer"></p>
+				  		</div>
+
+				  		<!-- <div> {{ crosswordQuestion }} </div> -->
+
+				  		<div class="form-row">
+	    					<div class="col-md-6">
+	    						<label for="validationCustom01">Starting Place</label>
+	    						<input v-model="firstQuestionPlace" class="form-control">
+	    					</div>
+	    					<div class="col-md-6">
+	    						<label for="validationCustom01">Ending Place</label>
+	    						<input v-model="lastQuestionPlace" class="form-control" placeholder="">
+	    					</div>
+	    				</div>
+	    			</div>
+
+	    			<div class="collapse show" id="myCollapsible">
+  						<div class="card card-body">
+    						Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident.
+  						</div>
+					</div>
+
+
+				</div> <!-- end of col-12 -->
+			</div>
+		</div>
+
+  		
 
 	</div> <!-- end of #app div -->
 
 
 
 	<script type="text/javascript">
-
-		function startTimer()
-			{
-			    var startTimestamp = moment().startOf("day");
-			    setInterval(function() {
-			        startTimestamp.add(1, 'second');
-			        document.getElementById('timer').innerHTML = 
-			            "Time studied: " + startTimestamp.format('HH:mm:ss');
-			    }, 1000);
-			}
-
-			startTimer();
 
 		var app = new Vue({
 	  		el: '#app',
@@ -104,12 +131,16 @@
 	  				//return this.crosswordList[_.random(0, numQuestions)];
 	  				this.showAnswer = false;
 	  				this.showExplanation = false;
+	  				this.countQuestions();
 	  			},
 	  			buttonShowAnswer: function() {
 	  				this.showAnswer = true;
 	  			},
 	  			buttonShowExplanation: function() {
 	  				this.showExplanation = true;
+	  			},
+	  			countQuestions: function() {
+	  				this.numOfQuestionsAnswered += 1;
 	  			}
 	  		},
 	  		data: {
@@ -139,6 +170,20 @@
   					))
   					//.then(console.log(this.crosswordList));
 	  		}
+		})
+
+		function startTimer(){
+		    var startTimestamp = moment().startOf("day");
+		    setInterval(function() {
+		        startTimestamp.add(1, 'second');
+		        document.getElementById('timer').innerHTML = 
+		            "Time studied: " + startTimestamp.format('HH:mm:ss');
+		    }, 1000);
+		}
+		startTimer();
+
+		$('#myCollapsible').collapse({
+  			toggle: true
 		})
 
 	</script>
